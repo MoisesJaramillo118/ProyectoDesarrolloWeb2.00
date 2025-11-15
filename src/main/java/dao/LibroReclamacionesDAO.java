@@ -2,21 +2,17 @@ package dao;
 
 import dto.LibroReclamacionesDTO;
 import servicios.ConectaDB;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LibroReclamacionesDAO {
-
-    // ✅ INSERTAR un nuevo reclamo
+    
     public boolean insertar(LibroReclamacionesDTO l) {
-        String sql = "INSERT INTO libro_reclamaciones (nombre, correo, telefono, direccion, documento, tipo, producto, descripcion, pedido) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
+        String sql = "INSERT INTO libro_reclamaciones (nombre, correo, telefono, direccion, documento, tipo, producto, descripcion, pedido) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection cn = ConectaDB.getConexion();
              PreparedStatement ps = cn.prepareStatement(sql)) {
-
+            
             ps.setString(1, l.getNombre());
             ps.setString(2, l.getCorreo());
             ps.setString(3, l.getTelefono());
@@ -26,44 +22,123 @@ public class LibroReclamacionesDAO {
             ps.setString(7, l.getProducto());
             ps.setString(8, l.getDescripcion());
             ps.setString(9, l.getPedido());
-
+            
             return ps.executeUpdate() > 0;
-
+            
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
-
-    // ✅ LISTAR todos los reclamos para mostrarlos en el dashboard
-    public List<LibroReclamacionesDTO> listar() {
+    
+    public List<LibroReclamacionesDTO> listarTodos() throws Exception {
+        Connection cnx = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         List<LibroReclamacionesDTO> lista = new ArrayList<>();
-        String sql = "SELECT * FROM libro_reclamaciones ORDER BY id DESC";
-
-        try (Connection cn = ConectaDB.getConexion();
-             PreparedStatement ps = cn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
+        
+        try {
+            cnx = ConectaDB.getConexion();
+            String sql = "SELECT * FROM libro_reclamaciones ORDER BY fecha DESC";
+            ps = cnx.prepareStatement(sql);
+            rs = ps.executeQuery();
+            
             while (rs.next()) {
-                LibroReclamacionesDTO l = new LibroReclamacionesDTO();
-                l.setId(rs.getInt("id"));
-                l.setNombre(rs.getString("nombre"));
-                l.setCorreo(rs.getString("correo"));
-                l.setTelefono(rs.getString("telefono"));
-                l.setDireccion(rs.getString("direccion"));
-                l.setDocumento(rs.getString("documento"));
-                l.setTipo(rs.getString("tipo"));
-                l.setProducto(rs.getString("producto"));
-                l.setDescripcion(rs.getString("descripcion"));
-                l.setPedido(rs.getString("pedido"));
-
-                lista.add(l);
+                LibroReclamacionesDTO reclamo = new LibroReclamacionesDTO();
+                reclamo.setId(rs.getInt("id"));
+                reclamo.setNombre(rs.getString("nombre"));
+                reclamo.setCorreo(rs.getString("correo"));
+                reclamo.setTelefono(rs.getString("telefono"));
+                reclamo.setDireccion(rs.getString("direccion"));
+                reclamo.setDocumento(rs.getString("documento"));
+                reclamo.setTipo(rs.getString("tipo"));
+                reclamo.setProducto(rs.getString("producto"));
+                reclamo.setDescripcion(rs.getString("descripcion"));
+                reclamo.setPedido(rs.getString("pedido"));
+                reclamo.setFecha(rs.getTimestamp("fecha"));
+                lista.add(reclamo);
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } finally {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (cnx != null) cnx.close();
         }
-
+        
         return lista;
+    }
+    
+    public LibroReclamacionesDTO buscarPorId(int id) throws Exception {
+        Connection cnx = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        LibroReclamacionesDTO reclamo = null;
+        
+        try {
+            cnx = ConectaDB.getConexion();
+            String sql = "SELECT * FROM libro_reclamaciones WHERE id = ?";
+            ps = cnx.prepareStatement(sql);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                reclamo = new LibroReclamacionesDTO();
+                reclamo.setId(rs.getInt("id"));
+                reclamo.setNombre(rs.getString("nombre"));
+                reclamo.setCorreo(rs.getString("correo"));
+                reclamo.setTelefono(rs.getString("telefono"));
+                reclamo.setDireccion(rs.getString("direccion"));
+                reclamo.setDocumento(rs.getString("documento"));
+                reclamo.setTipo(rs.getString("tipo"));
+                reclamo.setProducto(rs.getString("producto"));
+                reclamo.setDescripcion(rs.getString("descripcion"));
+                reclamo.setPedido(rs.getString("pedido"));
+                reclamo.setFecha(rs.getTimestamp("fecha"));
+            }
+        } finally {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (cnx != null) cnx.close();
+        }
+        
+        return reclamo;
+    }
+    
+    public boolean eliminar(int id) throws Exception {
+        Connection cnx = null;
+        PreparedStatement ps = null;
+        
+        try {
+            cnx = ConectaDB.getConexion();
+            String sql = "DELETE FROM libro_reclamaciones WHERE id = ?";
+            ps = cnx.prepareStatement(sql);
+            ps.setInt(1, id);
+            
+            return ps.executeUpdate() > 0;
+        } finally {
+            if (ps != null) ps.close();
+            if (cnx != null) cnx.close();
+        }
+    }
+    
+    public int contarTodos() throws Exception {
+        Connection cnx = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try {
+            cnx = ConectaDB.getConexion();
+            String sql = "SELECT COUNT(*) as total FROM libro_reclamaciones";
+            ps = cnx.prepareStatement(sql);
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+            return 0;
+        } finally {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (cnx != null) cnx.close();
+        }
     }
 }

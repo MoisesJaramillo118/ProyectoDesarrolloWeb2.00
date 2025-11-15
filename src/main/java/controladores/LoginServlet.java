@@ -17,22 +17,59 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // Establecer encoding para caracteres especiales
+        request.setCharacterEncoding("UTF-8");
+        
         String correo = request.getParameter("correo");
-        String contraseña = request.getParameter("contraseña");
+        String contrasena = request.getParameter("contraseña");
+
+        System.out.println("=== INTENTO DE LOGIN ===");
+        System.out.println("Correo recibido: [" + correo + "]");
+        System.out.println("Contraseña recibida: [" + contrasena + "]");
+
+        // Validar que los campos no estén vacíos
+        if (correo == null || correo.trim().isEmpty() || 
+            contrasena == null || contrasena.trim().isEmpty()) {
+            System.err.println("❌ Campos vacíos");
+            response.sendRedirect(request.getContextPath() + "/vistas/login.jsp?error=3");
+            return;
+        }
 
         try {
             UsuarioDAO dao = new UsuarioDAO();
-            UsuarioDTO usuario = dao.validarLogin(correo, contraseña);
+            UsuarioDTO usuario = dao.validarLogin(correo.trim(), contrasena);
 
             if (usuario != null) {
-                // ✅ Crear sesión
-                HttpSession sesion = request.getSession();
+                // ✅ Crear sesión segura
+                HttpSession sesion = request.getSession(false);
+                
+                // Invalidar sesión anterior si existe (prevenir session fixation)
+                if (sesion != null) {
+                    sesion.invalidate();
+                }
+                
+                sesion = request.getSession(true);
+                
+                // Configurar timeout de sesión (30 minutos)
+                sesion.setMaxInactiveInterval(1800);
+                
+                // Guardar información del usuario
                 sesion.setAttribute("usuario", usuario);
+                sesion.setAttribute("rol", usuario.getRol());
+                sesion.setAttribute("nombre", usuario.getNombre());
+                sesion.setAttribute("correo", usuario.getCorreo());
+                sesion.setAttribute("loginTime", System.currentTimeMillis());
 
-                // ✅ Redirigir al dashboard si el login fue correcto
-                response.sendRedirect(request.getContextPath() + "/vistas/dashboard.jsp");
+                // ✅ Redirigir según el rol
+               if (usuario.esAdmin()) {
+    response.sendRedirect(request.getContextPath() + "/vistas/dashboard.jsp");
+} else {
+    // Usuarios regulares van al catálogo de carros
+    response.sendRedirect(request.getContextPath() + "/verCarros");
+}
+                
             } else {
-                // ❌ Usuario o contraseña incorrectos
+                // ❌ Credenciales incorrectas
                 response.sendRedirect(request.getContextPath() + "/vistas/login.jsp?error=1");
             }
 
@@ -45,7 +82,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Redirigir al login si acceden directamente al servlet por GET
+        // Redirigir al login si acceden directamente
         response.sendRedirect(request.getContextPath() + "/vistas/login.jsp");
     }
 }

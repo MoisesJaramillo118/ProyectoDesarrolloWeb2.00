@@ -1,5 +1,7 @@
 package dto;
 
+import java.sql.Timestamp;
+
 public class ContactoDTO {
     private int id;
     private String nombre;
@@ -7,22 +9,66 @@ public class ContactoDTO {
     private String telefono;
     private String asunto;
     private String mensaje;
+    private Timestamp fecha;  // ← AGREGAR ESTE CAMPO
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    // Constructor vacío
+    public ContactoDTO() {}
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    // Getters y Setters
+    public int getId() {
+        return id;
+    }
 
-    public String getCorreo() { return correo; }
-    public void setCorreo(String correo) { this.correo = correo; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getTelefono() { return telefono; }
-    public void setTelefono(String telefono) { this.telefono = telefono; }
+    public String getNombre() {
+        return nombre;
+    }
 
-    public String getAsunto() { return asunto; }
-    public void setAsunto(String asunto) { this.asunto = asunto; }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-    public String getMensaje() { return mensaje; }
-    public void setMensaje(String mensaje) { this.mensaje = mensaje; }
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getAsunto() {
+        return asunto;
+    }
+
+    public void setAsunto(String asunto) {
+        this.asunto = asunto;
+    }
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
+    }
+
+    // ← AGREGAR ESTOS MÉTODOS
+    public Timestamp getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Timestamp fecha) {
+        this.fecha = fecha;
+    }
 }

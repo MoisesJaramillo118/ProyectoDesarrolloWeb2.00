@@ -8,19 +8,9 @@ public class SugerenciaDTO {
     private String correo;
     private String asunto;
     private String mensaje;
-    private Timestamp fecha;  // ⏰ Nuevo campo para la fecha
+    private Timestamp fecha;  // ← AGREGAR
 
-    public SugerenciaDTO() {
-    }
-
-    public SugerenciaDTO(int id, String nombre, String correo, String asunto, String mensaje, Timestamp fecha) {
-        this.id = id;
-        this.nombre = nombre;
-        this.correo = correo;
-        this.asunto = asunto;
-        this.mensaje = mensaje;
-        this.fecha = fecha;
-    }
+    public SugerenciaDTO() {}
 
     // Getters y Setters
     public int getId() {
@@ -63,6 +53,7 @@ public class SugerenciaDTO {
         this.mensaje = mensaje;
     }
 
+    // ← AGREGAR
     public Timestamp getFecha() {
         return fecha;
     }
