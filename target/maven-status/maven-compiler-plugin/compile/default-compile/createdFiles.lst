@@ -1,4 +1,6 @@
+filtros\FiltroAutenticacion.class
 controladores\EmpresaServlet.class
+utils\SecurityUtil.class
 dto\LibroReclamacionesDTO.class
 dto\ContactoDTO.class
 controladores\SugerenciaServlet.class
@@ -6,6 +8,8 @@ dao\CarroDAO.class
 controladores\ContactoServlet.class
 controladores\CarroPublicServlet.class
 dao\ContactoDAO.class
+filtros\FiltroRolAdmin.class
+controladores\RegistroServlet.class
 dao\UsuarioDAO.class
 servicios\ConectaDB.class
 dto\CarroDTO.class
@@ -14,6 +18,7 @@ dto\EmpresaDTO.class
 dto\UsuarioDTO.class
 dao\SugerenciaDAO.class
 dao\LibroReclamacionesDAO.class
+utils\SessionUtil.class
 com\mycompany\proydesweb2\JakartaRestConfiguration.class
 controladores\LibroReclamacionesServlet.class
 dto\SugerenciaDTO.class
