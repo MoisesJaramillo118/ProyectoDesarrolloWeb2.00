@@ -13,7 +13,7 @@ public class ConectaDB {
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String URL = "jdbc:mysql://localhost:3306/simcardb";
     private static final String USER = "root";
-    private static final String PASSWORD = ""; // Cambia si tienes contraseña en MySQL
+    private static final String PASSWORD = "root"; // Cambia si tienes contraseña en MySQL
     
     /**
      * Obtiene una conexión a la base de datos
