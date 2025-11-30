@@ -1,0 +1,127 @@
+# =============================================
+# .gitignore para Proyecto Java Web (Maven)
+# 
+# =============================================
+
+# =============================================
+# Archivos compilados y carpetas de build
+# =============================================
+target/
+build/
+out/
+*.class
+*.jar
+*.war
+*.ear
+
+# =============================================
+# IDE - NetBeans
+# =============================================
+nbproject/private/
+nbbuild/
+nbdist/
+.nb-gradle/
+nb-configuration.xml
+
+# =============================================
+# IDE - IntelliJ IDEA
+# =============================================
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# =============================================
+# IDE - Eclipse
+# =============================================
+.project
+.classpath
+.settings/
+.metadata/
+bin/
+
+# =============================================
+# IDE - VS Code
+# =============================================
+.vscode/
+
+# =============================================
+# Archivos del sistema operativo
+# =============================================
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.fuse_hidden*
+.nfs*
+
+# =============================================
+# Logs y archivos temporales
+# =============================================
+*.log
+logs/
+temp/
+tmp/
+*.tmp
+*.bak
+*.swp
+
+# =============================================
+# Archivos de configuración local
+# =============================================
+# Archivos con credenciales o configuración local
+*.local
+*.local.*
+application-local.properties
+application-local.yml
+
+# =============================================
+# Dependencias (se descargan con Maven)
+# =============================================
+# No incluir librerías, Maven las descargará
+lib/
+
+# =============================================
+# Archivos de pruebas y cobertura
+# =============================================
+test-output/
+coverage/
+*.exec
+jacoco.exec
+
+# =============================================
+# Otros archivos que no deben subirse
+# =============================================
+# Archivos de configuración de servidores locales
+.tomcat/
+.glassfish/
+
+# Archivos de backup de editores
+*~
+\#*\#
+.#*
+
+# Archivos comprimidos (evitar subir por accidente)
+*.zip
+*.rar
+*.7z
+*.tar.gz
+
+# =============================================
+# Archivos específicos del proyecto
+# =============================================
+# Si tienen archivos de configuración con contraseñas
+# o datos sensibles, añadirlos aquí
+
+# Ejemplo: archivo de conexión a base de datos local
+# config/db-local.properties

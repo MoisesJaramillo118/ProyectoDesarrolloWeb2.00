@@ -28,8 +28,7 @@
     
     <!-- Página de inicio -->
     <welcome-file-list>
-    <welcome-file>index.jsp</welcome-file>
-    <welcome-file>index.html</welcome-file>
+<welcome-file>verCarros</welcome-file>
 </welcome-file-list>
     
     <!-- Páginas de error personalizadas -->
