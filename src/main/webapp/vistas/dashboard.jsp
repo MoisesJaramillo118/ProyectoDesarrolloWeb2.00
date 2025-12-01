@@ -24,14 +24,6 @@
     <title>Dashboard Administrativo - Global Cars</title>
     
     <!-- Bootstrap CSS -->
-    <!-- Ver Contactos -->
-<a href="${pageContext.request.contextPath}/contacto">Ver Contactos</a>
-
-<!-- Ver Sugerencias -->
-<a href="${pageContext.request.contextPath}/sugerencia?accion=listar">Ver Sugerencias</a>
-
-<!-- Ver Reclamos -->
-<a href="${pageContext.request.contextPath}/libro">Ver Libro de Reclamaciones</a>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     

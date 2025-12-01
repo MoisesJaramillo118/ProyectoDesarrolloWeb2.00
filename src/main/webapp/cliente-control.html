@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cliente Control - API Carros</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    form { margin-bottom: 20px; }
+    input, button { margin: 5px; padding: 8px; }
+    h2 { margin-top: 30px; }
+    .resultado { margin-top: 10px; color: green; }
+    .error { margin-top: 10px; color: red; }
+  </style>
+</head>
+<body>
+  <h1>Cliente Control para API de Carros</h1>
+
+  <!-- CREAR -->
+  <h2>Agregar Carro</h2>
+  <form id="formCrear" enctype="multipart/form-data">
+    <input name="nombre" placeholder="Nombre" required>
+    <input name="descripcion" placeholder="Descripción" required>
+    <input name="precio" type="number" placeholder="Precio" required>
+    <input type="file" name="archivoImagen" accept="image/*" required>
+    <button type="submit">Agregar</button>
+  </form>
+  <div id="resultadoCrear"></div>
+
+  <!-- ACTUALIZAR -->
+  <h2>Modificar Carro</h2>
+  <form id="formActualizar" enctype="multipart/form-data">
+    <input name="id" type="number" placeholder="ID" required>
+    <input name="nombre" placeholder="Nuevo nombre" required>
+    <input name="descripcion" placeholder="Nueva descripción">
+    <input name="precio" type="number" placeholder="Nuevo precio" required>
+    <input type="file" name="archivoImagen" accept="image/*">
+    <button type="submit">Modificar</button>
+  </form>
+  <div id="resultadoActualizar"></div>
+
+  <script>
+    const baseUrl = "http://localhost:8080/ProyDesWeb2/carro";
+
+    // CREAR
+    document.getElementById("formCrear").addEventListener("submit", e => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      formData.append("accion", "insertar");
+
+      fetch(baseUrl, {
+        method: "POST",
+        body: formData,
+        headers: { "X-Requested-With": "XMLHttpRequest" }
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("resultadoCrear").textContent = data.success
+          ? "✅ Carro agregado correctamente"
+          : "❌ " + data.message;
+      })
+      .catch(err => {
+        document.getElementById("resultadoCrear").textContent = "❌ Error al agregar carro";
+        console.error(err);
+      });
+    });
+
+    // ACTUALIZAR
+    document.getElementById("formActualizar").addEventListener("submit", e => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      formData.append("accion", "actualizar");
+
+      fetch(baseUrl, {
+        method: "POST",
+        body: formData,
+        headers: { "X-Requested-With": "XMLHttpRequest" }
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("resultadoActualizar").textContent = data.success
+          ? "✅ Carro modificado correctamente"
+          : "❌ " + data.message;
+      })
+      .catch(err => {
+        document.getElementById("resultadoActualizar").textContent = "❌ Error al modificar carro";
+        console.error(err);
+      });
+    });
+  </script>
+</body>
+</html>

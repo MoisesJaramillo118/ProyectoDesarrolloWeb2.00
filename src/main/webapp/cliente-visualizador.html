@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cliente Visualizador - API Carros</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    input, button { margin: 5px; padding: 8px; }
+    h2 { margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <h1>Cliente Visualizador para API de Carros</h1>
+
+  <!-- LISTAR TODOS -->
+  <h2>Listar todos los carros</h2>
+  <button id="btnListar">Listar Carros</button>
+  <ul id="listaCarros"></ul>
+
+  <!-- OBTENER UNO -->
+  <h2>Buscar carro por ID</h2>
+  <form id="formBuscar">
+    <input name="id" type="number" placeholder="ID del carro" required>
+    <button type="submit">Buscar</button>
+  </form>
+  <pre id="resultadoCarro"></pre>
+
+  <script>
+    const baseUrl = "http://localhost:8080/ProyDesWeb2/api/v1/carros";
+
+    // LISTAR TODOS
+    document.getElementById("btnListar").addEventListener("click", () => {
+      fetch(baseUrl)
+        .then(res => res.json())
+        .then(data => {
+          const lista = document.getElementById("listaCarros");
+          lista.innerHTML = "";
+          data.forEach(carro => {
+            const li = document.createElement("li");
+            li.textContent = `${carro.id} - ${carro.nombre} - $${carro.precio}`;
+            lista.appendChild(li);
+          });
+        })
+        .catch(err => console.error("Error al listar:", err));
+    });
+
+    // BUSCAR UNO
+    document.getElementById("formBuscar").addEventListener("submit", e => {
+      e.preventDefault();
+      const id = new FormData(e.target).get("id");
+
+      fetch(`${baseUrl}/${id}`)
+        .then(res => {
+          if (!res.ok) throw new Error("No encontrado");
+          return res.json();
+        })
+        .then(data => {
+          document.getElementById("resultadoCarro").textContent =
+            `ID: ${data.id}\nNombre: ${data.nombre}\nPrecio: ${data.precio}`;
+        })
+        .catch(err => {
+          document.getElementById("resultadoCarro").textContent = "❌ Carro no encontrado";
+          console.error("Error al buscar:", err);
+        });
+    });
+  </script>
+</body>
+</html>
