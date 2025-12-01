@@ -67,6 +67,11 @@
                                     <div class="d-grid">
                                         <button type="submit" class="btn btn-primary btn-lg">Enviar sugerencia</button>
                                     </div>
+                                    <div class="d-grid mt-3">
+                                    <button type="button" class="btn btn-success btn-lg" id="btnFetch">
+                                    <!--Enviar sugerencia con Fetch -->
+                                    </button>
+                                  </div>
                                 </form>
                             </div>
                         </div>
@@ -130,5 +135,56 @@
                 });
             });
         </script>
+        <!-- Script: envío con Fetch API -->
+         <script>
+        document.getElementById("btnFetch").addEventListener("click", function () {
+        const form = document.getElementById("formSugerencia");
+
+    // Validación nativa de bootstrap/jsp
+    if (!form.checkValidity()) {
+        form.classList.add("was-validated");
+        return;
+    }
+
+    const datos = {
+        nombre: document.getElementById("nombre").value,
+        correo: document.getElementById("correo").value,
+        asunto: document.getElementById("asunto").value,
+        mensaje: document.getElementById("mensaje").value
+    };
+
+    fetch('${pageContext.request.contextPath}/sugerencia', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datos)
+    })
+    .then(res => res.json())
+    .then(resp => {
+        const container = document.querySelector('.card-body');
+        if (resp.success) {
+            container.insertAdjacentHTML(
+                'afterbegin',
+                `<div class="alert alert-success text-center">${resp.message}</div>`
+            );
+            form.reset();
+            form.classList.remove("was-validated");
+        } else {
+            container.insertAdjacentHTML(
+                'afterbegin',
+                `<div class="alert alert-danger text-center">${resp.message}</div>`
+            );
+        }
+    })
+    .catch(err => {
+        document.querySelector('.card-body').insertAdjacentHTML(
+            'afterbegin',
+            `<div class="alert alert-danger text-center">Error en la petición Fetch.</div>`
+        );
+        console.error(err);
+    });
+});
+    </script>
     </body>
 </html>
