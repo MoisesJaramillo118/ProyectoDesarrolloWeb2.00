@@ -44,7 +44,7 @@
                             <th>Teléfono</th>
                             <th>Asunto</th>
                             <th>Mensaje</th>
-                            <th>Fecha</th>
+                          
                             <th>Acciones</th>
                         </tr>
                     </thead>

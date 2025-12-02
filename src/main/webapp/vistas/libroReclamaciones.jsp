@@ -124,11 +124,16 @@
                         method: 'POST',
                         data: datos,
                         dataType: 'json',
+                        headers: {'X-Requested-With': 'XMLHttpRequest'}, // 👈 importante
                         success: function (resp) {
-                            mostrarMensaje(resp.success ? 'success' : 'danger', resp.message);
+                            $('#mensajeAjax').empty(); // limpiar mensajes anteriores
                             if (resp.success) {
+                                // Mostrar mensaje uniforme
+                                mostrarMensaje('success', '✅ Reclamo enviado correctamente.');
                                 form.reset();
                                 form.classList.remove('was-validated');
+                            } else {
+                                mostrarMensaje('danger', resp.message || 'No se pudo enviar el reclamo.');
                             }
                         },
                         error: function () {
@@ -136,12 +141,13 @@
                         }
                     });
                 });
+
                 function mostrarMensaje(tipo, texto) {
                     const alerta = `<div class="alert alert-${tipo} alert-dismissible fade show mt-3" role="alert">
             ${texto}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-                    </div>`;
-                    $('#mensajeAjax').html(alerta); 
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>`;
+                    $('#mensajeAjax').html(alerta);
                 }
             });
         </script>

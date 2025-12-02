@@ -25,16 +25,10 @@
                                 Si tienes alguna consulta o comentario, completa este formulario y te responderemos a la brevedad.
                             </p>
 
-                            <!-- Mensajes -->
-                            <c:if test="${not empty mensajeExito}">
-                                <div class="alert alert-success text-center">${mensajeExito}</div>
-                            </c:if>
-                            <c:if test="${not empty mensajeError}">
-                                <div class="alert alert-danger text-center">${mensajeError}</div>
-                            </c:if>
+                            <!-- Mensajes dinámicos se insertan aquí vía JS -->
 
                             <!-- Formulario -->
-                            <form action="${pageContext.request.contextPath}/contacto" method="post" novalidate>
+                            <form id="formContacto" novalidate>
                                 <div class="mb-3">
                                     <label for="nombre" class="form-label">Nombre completo</label>
                                     <input type="text" class="form-control" id="nombre" name="nombre" required>
@@ -79,20 +73,58 @@
     <jsp:include page="/includes/footer.jsp" />
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
     <script>
-        (() => {
-            'use strict'
-            const forms = document.querySelectorAll('form')
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
+        $(document).ready(function () {
+            const ctx = '${pageContext.request.contextPath}';
+
+            $('#formContacto').on('submit', function (event) {
+                event.preventDefault();
+
+                if (!this.checkValidity()) {
+                    event.stopPropagation();
+                    this.classList.add('was-validated');
+                    return;
+                }
+
+                const datos = {
+                    nombre: $('#nombre').val(),
+                    correo: $('#correo').val(),
+                    telefono: $('#telefono').val(),
+                    asunto: $('#asunto').val(),
+                    mensaje: $('#mensaje').val()
+                };
+
+                $.ajax({
+                    url: ctx + '/contacto',
+                    method: 'POST',
+                    data: datos,
+                    dataType: 'json',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }, // 👈 clave
+                    success: function (resp) {
+                        $('.alert').remove(); // limpiar mensajes anteriores
+                        if (resp.success) {
+                            $('.card-body').prepend(
+                                '<div class="alert alert-success text-center">' + resp.message + '</div>'
+                            );
+                            $('#formContacto')[0].reset();
+                            $('#formContacto').removeClass('was-validated');
+                        } else {
+                            $('.card-body').prepend(
+                                '<div class="alert alert-danger text-center">' + resp.message + '</div>'
+                            );
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error("Error AJAX:", xhr.responseText);
+                        $('.card-body').prepend(
+                            '<div class="alert alert-danger text-center">Error al enviar el mensaje.</div>'
+                        );
                     }
-                    form.classList.add('was-validated')
-                }, false)
-            })
-        })()
+                });
+            });
+        });
     </script>
 </body>
 </html>
